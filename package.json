@@ -1,0 +1,22 @@
+{
+  "name": "node-needless",
+  "version": "0.0.1",
+  "description": "Remove modules from the require cache.",
+  "main": "needless.js",
+  "scripts": {
+    "test": "cake test",
+    "build": "cake build",
+    "prepublish": "cake build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PPvG/node-needless.git"
+  },
+  "author": "Peter-Paul van Gemerden",
+  "license": "BSD",
+  "devDependencies": {
+    "coffee-script": "~1.6.2",
+    "flour": "~0.4.12",
+    "mocha": "~1.8.2"
+  }
+}
