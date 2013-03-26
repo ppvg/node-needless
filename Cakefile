@@ -1,19 +1,16 @@
-flour = require 'flour'
 cp    = require 'child_process'
 
-mochaArgs = [
-  '--compilers', 'coffee:coffee-script'
-  '-r', 'test/common'
-  '-c'
-]
-mochaPath = 'node_modules/mocha/bin/mocha'
-
 task 'build', ->
-  compile "needless.coffee", "needless.js"
+  cp.spawn 'coffee', ['--compile', '--bare', 'needless.coffee'], {stdio: 'inherit'}
 
 task 'test', "Run the tests using mocha", ->
   invoke 'build'
-  args = mochaArgs.concat ['--reporter', 'spec']
-  cp.spawn mochaPath, args, {stdio: 'inherit'}
+  mocha = 'node_modules/mocha/bin/mocha'
+  args = [
+    '--compilers', 'coffee:coffee-script'
+    '--reporter', 'spec'
+    '-colors'
+  ]
+  cp.spawn mocha, args, {stdio: 'inherit'}
 
 task 'make', "Alias for 'build'", -> invoke 'build'
