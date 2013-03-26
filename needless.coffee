@@ -1,5 +1,4 @@
 path = require 'path'
-parentDirname = path.dirname module.parent.filename
 
 
 module.exports = needless = (moduleName) ->
@@ -25,10 +24,12 @@ searchCache = (moduleName, callback) ->
 
 
 getModuleFromCache = (name) ->
-  if (name.indexOf "./") is 0 then name = toFullPath name
+  if isRelativePath name then name = toFullPath name
   modulePath = require.resolve name
   require.cache[modulePath]
 
+isRelativePath = (name) -> (name.indexOf './' is 0)
 
 toFullPath = (relativePath) ->
+  parentDirname = path.dirname module.parent.filename
   path.join parentDirname, relativePath
