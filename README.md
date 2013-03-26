@@ -1,4 +1,3 @@
-
                          _ _
      _ __   ___  ___  __| | | ___  ___ ___
     | '_ \ / _ \/ _ \/ _` | |/ _ \/ __/ __|
@@ -11,7 +10,8 @@ This tiny little module allows you to remove modules from the `require` cache, e
 It's kind of a hack, so before dumping this in your project and calling it a day, read on!
 
 
-== When (**not**) to use this ==
+When (not) to use this
+--------------------------
 
 As mentioned above, `needless` can be used when the parent process can't possibly be stopped. For instance, I use it to reload plugins for an IRC bot. If the bot's process would be restarted, it would have to reconnect to the server. People on IRC generally don't like blinkenbots.
 
@@ -25,20 +25,24 @@ For unit testing, there are some really nice frameworks that do the same thing a
 If you don't _really_ need to keep the parent process running, there are some great **stable** hot code reloading modules, like [node-supervisor](https://github.com/isaacs/node-supervisor). But if you're reading this, you probably already know that.
 
 
-== Why (**not**) to use this ==
+Why (not) to use this
+-------------------------
 
-There two really good reasons **not** to use this:
+Reasons to use this module include "living dangerously" and "because I can", amongst others.
 
-1. It's not officially supported. The `require` API really stable ("[Stability: 5 - Locked][modules]", in fact), but its internals might change, causing your software to explode and splatter broken bits all over your nice desktop wallpaper.
+There are two good reasons **not** to use it:
+
+1. It's not officially supported. The `require` API is really stable ("[Stability: 5 - Locked][modules]", in fact), but its internals might change, causing your software to explode and splatter broken bits all over your nice desktop wallpaper.
 2. If you have a complicated require chain (for example: another module `require`d the same, now unloaded, module), it might behave unpredictably. Though if all you do is "a requires b requires c", you'll probably be OK.
 3. People on the internet will hate you.
 
-OK, so I made that last one up. Deal with it.
+OK, so I made that last one up.
 
-  [stability]: http://nodejs.org/api/modules.html#modules_modules
+  [modules]: http://nodejs.org/api/modules.html#modules_modules
 
 
-== How to use this ==
+How to use this
+---------------
 
 Easy! Let me show you using this hilariously contrived example!
 
@@ -79,15 +83,17 @@ Now, without stopping `node`, edit `child.js`. The `node` process should reflect
 (etc.)
 ```
 
-"Wow Bob, that looks real easy!"
+"Wow Bob, that looks real easy!"<br />
 "You betcha! And if you install within the next 5 minutes, we'll throw in a free .coffee!"
 
 
-== Why CoffeeScript? ==
+Why CoffeeScript?
+-----------------
 
 Because I happen to like CoffeeScript, while it hilariously enrages some other people. I call that win-win. By the way: the usual argument against CoffeeScript is that it compiles into hard-to-read JavaScript (which is sometimes true, but more so if you write tricky CoffeeScript in the first place). Having said that, go and have a look at `needless.js`.
 
 
-== License ==
+License
+-------
 
 Simplified BSD (2-clause). See LICENSE.
