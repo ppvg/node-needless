@@ -1,10 +1,9 @@
 {
   "name": "needless",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Remove modules from the require cache.",
   "main": "needless.js",
   "scripts": {
-    "test": "cake test",
     "build": "cake build",
     "prepublish": "cake build"
   },
@@ -15,7 +14,6 @@
   "author": "Peter-Paul van Gemerden",
   "license": "BSD",
   "devDependencies": {
-    "coffee-script": "~1.6.2",
-    "mocha": "~1.8.2"
+    "coffee-script": "~1.6.2"
   }
 }

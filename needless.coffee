@@ -28,7 +28,7 @@ getModuleFromCache = (name) ->
   modulePath = require.resolve name
   require.cache[modulePath]
 
-isRelativePath = (name) -> (name.indexOf './' is 0)
+isRelativePath = (name) -> (name.indexOf './') is 0
 
 toFullPath = (relativePath) ->
   parentDirname = path.dirname module.parent.filename

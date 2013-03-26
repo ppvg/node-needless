@@ -5,7 +5,7 @@
     |_| |_|\___|\___|\__,_|_|\___||___/___/
 
 
-This tiny little module allows you to remove modules from the `require` cache, easily and reasonably reliably. It can be used to do live code reloading in situations where the parent process **must** keep running. Works with JavaScript and CoffeeScript.
+This tiny little module allows you to remove modules from the `require` cache, easily and reasonably reliably. It can be used to do live code reloading in situations where the parent process **must** keep running. Works with JavaScript and CoffeeScript (but keep the [known weird stuff][#weird_stuff] in mind).
 
 It's kind of a hack, so before dumping this in your project and calling it a day, read on!
 
@@ -85,6 +85,16 @@ Now, without stopping `node`, edit `child.js`. The `node` process should reflect
 
 "Wow Bob, that looks real easy!"<br />
 "You betcha! And if you install within the next 5 minutes, we'll throw in a free .coffee!"
+
+
+Known weird stuff<a id="weird_stuff"></a>
+-----------------
+
+Be careful when using CoffeeScript, because it sometimes breaks the require chain. The most notable case is when you `require` an entire folder. It seems like only `index.coffee` is loaded, but in reality CoffeeScript loads **all files** in the folder!
+
+So instead of `require "./myMod"`, do `require "./myMod/index.coffee"`. The same goes for running files from the terminal; use `coffee ./myMod/index` (or `cd ./myMod` and then `coffee index`).
+
+With regular Node.js, this weird problem doesn't occur.
 
 
 Why CoffeeScript?
