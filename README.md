@@ -5,9 +5,9 @@
     |_| |_|\___|\___|\__,_|_|\___||___/___/
 
 
-This tiny little module allows you to remove modules from the `require` cache, easily and reasonably reliably. It can be used to do live code reloading in situations where the parent process **must** keep running. Works with JavaScript and CoffeeScript (but **keep the [known weird stuff][#weird_stuff] in mind**).
+This tiny little module allows you to remove modules from the `require` cache, easily and reasonably reliably. It can be used to do live code reloading in situations where the parent process **must** keep running.
 
-It's kind of a hack, so before dumping this in your project and calling it a day, read on!
+Works with JavaScript and CoffeeScript (but **keep the [known weird stuff](#known-weird-stuff) in mind**).
 
 
 When (not) to use this
@@ -82,12 +82,12 @@ Now, without stopping `node`, edit `child.js`. The `node` process should reflect
 "You betcha! And if you install within the next 5 minutes, we'll throw in a free .coffee!"
 
 
-Known weird stuff<a id="weird_stuff"></a>
------------------------------------------
+Known weird stuff
+-----------------
 
-**Do not use `coffee ./directory`.****
+**Do not use `coffee ./directory`.**
 
-This is the biggest weird thing I ran into. Unline `node`, and unlike the `require` system, CoffeeScript's command-line utility will, when given a direcory as target, **run all files** inside a directory, instead of only `index.coffee` or `index.js`. This is a [known "feature"][bug], and it only happens with `coffee`, not with `node`.
+This is the biggest weird thing I ran into. Unlike `node`, and unlike the `require` system, CoffeeScript's command-line utility will, when given a direcory as target, **run all files** inside a directory, instead of only `index.coffee` or `index.js`. This is a [known "feature"][bug], and it only happens with `coffee`, not with `node`.
 
   [bug]: https://github.com/jashkenas/coffee-script/issues/2496
 
