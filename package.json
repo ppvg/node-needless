@@ -1,6 +1,6 @@
 {
   "name": "needless",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Remove modules from the require cache.",
   "main": "needless.js",
   "scripts": {
