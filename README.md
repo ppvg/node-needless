@@ -5,40 +5,35 @@
     |_| |_|\___|\___|\__,_|_|\___||___/___/
 
 
-This tiny little module allows you to remove modules from the `require` cache, easily and reasonably reliably. It can be used to do live code reloading in situations where the parent process **must** keep running. Works with JavaScript and CoffeeScript (but keep the [known weird stuff][#weird_stuff] in mind).
+This tiny little module allows you to remove modules from the `require` cache, easily and reasonably reliably. It can be used to do live code reloading in situations where the parent process **must** keep running. Works with JavaScript and CoffeeScript (but **keep the [known weird stuff][#weird_stuff] in mind**).
 
 It's kind of a hack, so before dumping this in your project and calling it a day, read on!
 
 
 When (not) to use this
---------------------------
+----------------------
 
-As mentioned above, `needless` can be used when the parent process can't possibly be stopped. For instance, I use it to reload plugins for an IRC bot. If the bot's process would be restarted, it would have to reconnect to the server. People on IRC generally don't like blinkenbots.
+As mentioned above, `needless` can be used when it's unpractical to stop the parent process. For instance, I use it to reload plugins for an IRC bot. If the bot's process would be restarted, it would have to reconnect to the server. People on IRC generally don't like blinkenbots.
 
 So. Two genuine use cases for this module:
 
-1. Unit testing.
-2. Live code reloading if and only if there's No Other Way.
+1. Unit testing, although I would recommend using [mockery](mockery) or [sandboxed-module](sandbox) instead.
+2. Live code reloading, when [node-supervisor](supervisor) isn't good enough.
 
-For unit testing, there are some really nice frameworks that do the same thing and more, like [mockery](https://github.com/mfncooper/mockery) and [sandboxed-module](https://github.com/felixge/node-sandboxed-module).
+  [mockery]: https://github.com/mfncooper/mockery
+  [sandbox]: https://github.com/felixge/node-sandboxed-module
+  [supervisor]: https://github.com/isaacs/node-supervisor
 
-If you don't _really_ need to keep the parent process running, there are some great **stable** hot code reloading modules, like [node-supervisor](https://github.com/isaacs/node-supervisor). But if you're reading this, you probably already know that.
 
+Arguments against messing with `require.cache`
+----------------------------------------------
 
-Why (not) to use this
--------------------------
+There are two good reasons **not** to use this module:
 
-Reasons to use this module include "living dangerously" and "because I can", amongst others.
+1. It's not officially supported. The `require` API is really stable ("[Stability: 5 - Locked][api]", in fact), but its internals might change, causing your software to explode and splatter broken bits all over your nice desktop wallpaper.
+2. If you have a complicated require chain (for example: another module `require`d the same, now unloaded, module), it might behave unpredictably.
 
-There are two good reasons **not** to use it:
-
-1. It's not officially supported. The `require` API is really stable ("[Stability: 5 - Locked][modules]", in fact), but its internals might change, causing your software to explode and splatter broken bits all over your nice desktop wallpaper.
-2. If you have a complicated require chain (for example: another module `require`d the same, now unloaded, module), it might behave unpredictably. Though if all you do is "a requires b requires c", you'll probably be OK.
-3. People on the internet will hate you.
-
-OK, so I made that last one up.
-
-  [modules]: http://nodejs.org/api/modules.html#modules_modules
+  [api]: http://nodejs.org/api/modules.html#modules_modules
 
 
 How to use this
@@ -88,19 +83,27 @@ Now, without stopping `node`, edit `child.js`. The `node` process should reflect
 
 
 Known weird stuff<a id="weird_stuff"></a>
------------------
+-----------------------------------------
 
-Be careful when using CoffeeScript, because it sometimes breaks the require chain. The most notable case is when you `require` an entire folder. It seems like only `index.coffee` is loaded, but in reality CoffeeScript loads **all files** in the folder!
+**Do not use `coffee ./directory`.****
 
-So instead of `require "./myMod"`, do `require "./myMod/index.coffee"`. The same goes for running files from the terminal; use `coffee ./myMod/index` (or `cd ./myMod` and then `coffee index`).
+This is the biggest weird thing I ran into. Unline `node`, and unlike the `require` system, CoffeeScript's command-line utility will, when given a direcory as target, **run all files** inside a directory, instead of only `index.coffee` or `index.js`. This is a [known "feature"][bug], and it only happens with `coffee`, not with `node`.
 
-With regular Node.js, this weird problem doesn't occur.
+  [bug]: https://github.com/jashkenas/coffee-script/issues/2496
+
+One solution is not to call `coffee` on a directory. So instead of `coffee ./myMod`, use `coffee ./myMod/index.coffee` (or `cd ./myMod` and then `coffee index`). Another solution is to use [CoffeeScriptRedux][redux], although at the time of writing, I have no idea how stable/usable that is.
+
+  [redux]: https://github.com/michaelficarra/CoffeeScriptRedux
+
+I've tested `needless` with various scenario's (including nested modules, relative paths, etc.), but there are things I haven't tested, like genuine _intentional_ cyclic dependencies. So please keep that in mind, and feel free to [open an issue on GitHub] if something doesn't work like you thought it would.
+
+  [issue]: https://github.com/PPvG/node-needless/issues
 
 
 Why CoffeeScript?
 -----------------
 
-Because I happen to like CoffeeScript, while it hilariously enrages some other people. I call that win-win. By the way: the usual argument against CoffeeScript is that it compiles into hard-to-read JavaScript (which is sometimes true, but more so if you write tricky CoffeeScript in the first place). Having said that, go and have a look at `needless.js`.
+Because I happen to like CoffeeScript and because it hilariously enrages some other people. I call that win-win. By the way: the usual argument against CoffeeScript is that it compiles into hard-to-read JavaScript (which is sometimes true, but more so if you write tricky CoffeeScript in the first place). Having said that, go and have a look at `needless.js`. I think it's pretty darn readable.
 
 
 License
